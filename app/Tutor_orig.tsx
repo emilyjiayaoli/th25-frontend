@@ -18,7 +18,6 @@ import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
 // Custom Components
-import DataMessageListener from "./DataMessageListener";
 import Canvas from "./Canvas"; // Import your Canvas (Tldraw) component
 
 export default function Tutor() {
@@ -64,8 +63,6 @@ export default function Tutor() {
         }}
         className="grid grid-rows-[2fr_1fr] items-center"
       >
-        {/* Listen for AI messages and update Canvas */}
-        <DataMessageListener onDataMessage={handleDataMessage} />
 
         {/* Render the Canvas (Tldraw Whiteboard) */}
         {/* <Canvas text={canvasText} /> */}
