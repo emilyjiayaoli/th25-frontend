@@ -18,7 +18,7 @@ import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
 // Custom Components
-import Canvas from "./Canvas"; // Import your Canvas (Tldraw) component
+import Canvas from "../components/Canvas"; // Import your Canvas (Tldraw) component
 
 export default function Tutor() {
   const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | undefined>(

@@ -43,7 +43,8 @@ const ChatText: React.FC = () => {
   }, [room]);
 
   return (
-    <div className="w-full h-[75vh] m-2 p-4 border-2 border-tl-blue rounded-lg overflow-y-auto flex flex-col">
+    // slightly less than 85vh because of margin 
+    <div className="w-full h-[83.5vh] m-2 p-4 border-2 border-tl-blue rounded-lg overflow-y-auto flex flex-col">
       {messages.length === 0 ? (
         <div className="flex-grow flex items-center justify-center text-gray-400 italic">
           When you chat, the Tutor's messages will appear here

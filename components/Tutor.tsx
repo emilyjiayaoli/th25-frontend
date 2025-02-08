@@ -12,7 +12,7 @@ import {
 } from "@livekit/components-react";
 import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
-import type { ConnectionDetails } from "./api/connection-details/route";
+import type { ConnectionDetails } from "../app/api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
@@ -72,7 +72,9 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
         </div>
 
         <div className="flex-grow flex flex-col">
+          {/* the dots */}
           <SimpleVoiceAssistant onStateChange={setAgentState} />
+          {/* chat now, mic, and stop chatting buttons */}
           <ControlBar
             onConnectButtonClicked={onConnectButtonClicked}
             agentState={agentState}
