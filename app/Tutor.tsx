@@ -19,7 +19,14 @@ import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
 import ChatText from "./ChatText"
 
-export default function Tutor() {
+// take in isWebcam and setIsWebcam as props
+interface InfoProps {
+  isWebcam: boolean;
+  setIsWebcam: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+// takes in props for isWebcam and setIsWebcam
+export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
   const [connectionDetails, updateConnectionDetails] = useState<
     ConnectionDetails | undefined
   >(undefined);
