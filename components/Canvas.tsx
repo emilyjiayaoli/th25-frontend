@@ -29,27 +29,13 @@ export default function Canvas() {
 
     function ExportCanvasButton() {
         return (
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '10px',
-                    left: '10px',
-                    zIndex: 1000,
-                    pointerEvents: 'all',
-                }}
-            >
-                <button
-                    style={{
-                        fontSize: 16,
-                        backgroundColor: 'thistle',
-                        padding: '10px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        pointerEvents: 'all',
-                    }}
-                    onClick={handleExport}
-                >
-                    Export Canvas as Image
+            // pt-1.5 pb-1 to center the icon
+            <div className="absolute top-2 left-2 z-[1000] pointer-events-auto bg-tl-blue text-white px-2 pt-1.5 pb-1 rounded-lg">
+                <button onClick={handleExport}>
+                    {/* ArrowDownOnSquare from Heroicons import will not render */}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
+                    </svg>
                 </button>
             </div>
         );
