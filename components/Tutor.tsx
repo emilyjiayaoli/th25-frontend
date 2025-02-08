@@ -89,8 +89,8 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
         serverUrl={connectionDetails?.serverUrl}
         connect={connectionDetails !== undefined}
         audio={true}
-        video={false}
-        screen={true}
+        video={isWebcam}
+        screen={!isWebcam}
         onMediaDeviceFailure={onDeviceFailure}
         onDisconnected={() => {
           updateConnectionDetails(undefined);
