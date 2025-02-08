@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import {
   LiveKitRoom,
   useVoiceAssistant,
@@ -10,12 +9,12 @@ import {
   AgentState,
   DisconnectButton,
 } from "@livekit/components-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { MediaDeviceFailure } from "livekit-client";
 import type { ConnectionDetails } from "../app/api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
-import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
+import { ArrowUpOnSquareStackIcon } from '@heroicons/react/24/outline';
 
 import ChatText from "./ChatText"
 
@@ -31,6 +30,8 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
     ConnectionDetails | undefined
   >(undefined);
   const [agentState, setAgentState] = useState<AgentState>("disconnected");
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onConnectButtonClicked = useCallback(async () => {
     // Generate room connection details, including:
@@ -52,6 +53,35 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
     updateConnectionDetails(connectionDetailsData);
   }, []);
 
+  const handleButtonClick = () => {
+    fileInputRef.current?.click(); // Trigger file input when button is clicked
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log('formdata', formData)
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('File uploaded successfully:', result);
+      } else {
+        console.error('File upload failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+
   return (
     <main className="flex flex-col w-full">
       <LiveKitRoom
@@ -72,6 +102,20 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
         </div>
 
         <div className="flex-grow flex flex-col">
+          <div className="relative">
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <button
+              onClick={handleButtonClick}
+              className="absolute top-2 left-2 bg-tl-blue text-white p-2 rounded flex items-center"
+            >
+              <ArrowUpOnSquareStackIcon className="h-6 w-6" />
+            </button>
+          </div>
           {/* the dots */}
           <SimpleVoiceAssistant onStateChange={setAgentState} />
           {/* chat now, mic, and stop chatting buttons */}

@@ -10,7 +10,7 @@ export default function Page() {
   const [isWebcam, setIsWebcam] = useState(false);
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen bg-[#FDFCFD]">
       <div className="h-[4vh]">
         <Banner />
       </div>

@@ -42,6 +42,32 @@ const ChatText: React.FC = () => {
     };
   }, [room]);
 
+
+  // const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (!file) return;
+
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   console.log('formdata', formData)
+
+  //   try {
+  //     const response = await fetch('http://127.0.0.1:5000/upload', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+
+  //     if (response.ok) {
+  //       const result = await response.json();
+  //       console.log('File uploaded successfully:', result);
+  //     } else {
+  //       console.error('File upload failed:', response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error uploading file:', error);
+  //   }
+  // };
+
   return (
     // slightly less than 85vh because of margin 
     <div className="w-full h-[82vh] mx-2 p-4 border-2 border-tl-blue rounded-lg overflow-y-auto flex flex-col">
@@ -58,6 +84,18 @@ const ChatText: React.FC = () => {
           </div>
         ))
       )}
+      {/* <div className="absolute bottom-2 left-2">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+          id="file-upload"
+        />
+        <label htmlFor="file-upload" className="cursor-pointer bg-tl-blue text-white px-4 py-2 rounded">
+          Upload Image
+        </label>
+      </div> */}
     </div>
   );
 };

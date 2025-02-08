@@ -62,7 +62,7 @@ export default function Canvas() {
     };
 
     return (
-        <div className="h-full w-full">
+        <div className="h-full w-full border-black border-2">
             <Tldraw
                 components={components}
                 style={{
