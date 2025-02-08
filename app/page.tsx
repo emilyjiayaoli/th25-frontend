@@ -11,7 +11,6 @@ export default function Page() {
   const [isWebcam, setIsWebcam] = useState(false);
   const webcamRef = useRef<Webcam>(null);
 
-  // Video constraints (Front camera)
   const videoConstraints = {
     width: 1280,
     height: 720,

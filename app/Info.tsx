@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 
-// take in isWebcam and setIsWebcam as props
 interface InfoProps {
   isWebcam: boolean;
   setIsWebcam: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,10 +30,9 @@ export default function Info({ isWebcam, setIsWebcam }: InfoProps) {
 
   return (
     <div className="h-full p-4 flex flex-col justify-center relative">
-      {/* Fixed Toggle Switch - Ensures Clickability */}
       <div className="absolute top-2 right-2 flex items-center space-x-2 z-50 pointer-events-auto">
         <span className="text-sm font-medium text-gray-700">
-          {isWebcam ? "Webcam ON" : "Webcam OFF (Canvas Sharing)"}
+          {isWebcam ? "Webcam On" : "Webcam Off"}
         </span>
         <button
           onClick={() => setIsWebcam((prev) => !prev)}
