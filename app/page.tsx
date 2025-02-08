@@ -21,7 +21,7 @@ export default function Page() {
       </div>
 
       {/* Right Half - Tutor */}
-      <div className="w-2/5">
+      <div className="w-2/5 h-screen flex">
         <Tutor isWebcam={isWebcam} setIsWebcam={setIsWebcam} />
       </div>
     </div>
