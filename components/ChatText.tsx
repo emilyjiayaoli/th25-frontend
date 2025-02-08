@@ -26,7 +26,10 @@ const ChatText: React.FC = () => {
         // Assuming the message is JSON-formatted
         const messageData = JSON.parse(text);
         if (messageData.type === "whiteboard_update") {
-          setMessages((prev) => [...prev, messageData.content]);
+          setMessages(prevMessages => {
+            const updatedMessages = [...prevMessages, messageData.content];
+            return updatedMessages;
+          });
         }
       } catch (e) {
         console.error("Failed to parse data message:", e);
@@ -40,12 +43,21 @@ const ChatText: React.FC = () => {
   }, [room]);
 
   return (
-    <div className="p-4 bg-gray-100 rounded-md max-h-60 overflow-y-auto">
-      {messages.map((msg, idx) => (
-        <div key={idx} className="mb-2">
-          <ReactMarkdown>{msg}</ReactMarkdown>
+    // slightly less than 85vh because of margin 
+    <div className="w-full h-[82vh] mx-2 p-4 border-2 border-tl-blue rounded-lg overflow-y-auto flex flex-col">
+      {messages.length === 0 ? (
+        <div className="flex-grow flex items-center justify-center text-gray-400 italic">
+          When you chat, the Tutor's messages will appear here
         </div>
-      ))}
+      ) : (
+        messages.map((msg, idx) => (
+          <div key={idx} className="mb-4 text-[#5F6269]">
+            <ReactMarkdown className="prose prose-blue max-w-none">
+              {msg}
+            </ReactMarkdown>
+          </div>
+        ))
+      )}
     </div>
   );
 };

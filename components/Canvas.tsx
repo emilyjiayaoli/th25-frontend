@@ -56,6 +56,8 @@ export default function Canvas() {
     }
 
     const components: TLUiComponents = {
+        PageMenu: null,
+        KeyboardShortcutsDialog: null,
         SharePanel: ExportCanvasButton,
     };
 

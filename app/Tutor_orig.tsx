@@ -18,7 +18,7 @@ import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
 // Custom Components
-import Canvas from "./Canvas"; // Import your Canvas (Tldraw) component
+import Canvas from "../components/Canvas"; // Import your Canvas (Tldraw) component
 
 export default function Tutor() {
   const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | undefined>(
@@ -87,12 +87,12 @@ function SimpleVoiceAssistant({ onStateChange }: SimpleVoiceAssistantProps) {
     onStateChange(state);
   }, [onStateChange, state]);
   return (
-    <div className="h-[300px] max-w-[90vw] mx-auto">
+    <div className="max-w-2xl mx-auto mt-8">
       <BarVisualizer
         state={state}
         barCount={5}
         trackRef={audioTrack}
-        className="agent-visualizer"
+        className="agent-visualizer rounded-lg bg-white shadow-sm p-4"
         options={{ minHeight: 24 }}
       />
     </div>
@@ -111,16 +111,16 @@ function ControlBar({ onConnectButtonClicked, agentState }: ControlBarProps) {
   }, [krisp]);
 
   return (
-    <div className="relative h-[100px]">
+    <div className="relative h-24 flex items-center justify-center">
       <AnimatePresence>
         {agentState === "disconnected" && (
           <motion.button
-            initial={{ opacity: 0, top: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, top: "-10px" }}
-            transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
-            onClick={onConnectButtonClicked}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium shadow-md hover:bg-blue-700 transition-colors"
+            onClick={() => onConnectButtonClicked()}
           >
             Start a conversation
           </motion.button>
@@ -129,11 +129,11 @@ function ControlBar({ onConnectButtonClicked, agentState }: ControlBarProps) {
       <AnimatePresence>
         {agentState !== "disconnected" && agentState !== "connecting" && (
           <motion.div
-            initial={{ opacity: 0, top: "10px" }}
-            animate={{ opacity: 1, top: 0 }}
-            exit={{ opacity: 0, top: "-10px" }}
-            transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="flex h-8 absolute left-1/2 -translate-x-1/2 justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="flex items-center gap-4 bg-white rounded-full px-4 py-2 shadow-md"
           >
             <VoiceAssistantControlBar controls={{ leave: false }} />
             <DisconnectButton>

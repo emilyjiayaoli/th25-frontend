@@ -1,28 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import Canvas from "./Canvas";
+import Canvas from "../components/Canvas";
 import Info from "./Info";
-import Tutor from "./Tutor";
+import Tutor from "../components/Tutor";
+import Banner from "../components/Banner";
 
 export default function Page() {
   const [isWebcam, setIsWebcam] = useState(false);
 
   return (
-    <div className="flex h-screen w-screen">
-      <div className="w-3/5 flex flex-col">
-        <div className="flex-grow-[3]">
-          <Canvas />
-        </div>
-        {/* Fix: Restrict Info Height */}
-        <div className="h-1/4 max-h-[200px]">
-        <Info isWebcam={isWebcam} setIsWebcam={setIsWebcam} />
-        </div>
+    <div className="h-screen w-screen">
+      <div className="h-[4vh]">
+        <Banner />
       </div>
+      <div className="flex">
+        <div className="w-3/5 flex flex-col">
+          <div className="pb-2 pl-2 h-[83vh]">
+            <Canvas />
+          </div>
+          <div className="h-[13vh]">
+            <Info isWebcam={isWebcam} setIsWebcam={setIsWebcam} />
+          </div>
+        </div>
 
-      {/* Right Half - Tutor */}
-      <div className="w-2/5">
-        <Tutor isWebcam={isWebcam} setIsWebcam={setIsWebcam} />
+        <div className="w-2/5 flex">
+          <Tutor isWebcam={isWebcam} setIsWebcam={setIsWebcam} />
+        </div>
       </div>
     </div>
   );

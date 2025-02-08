@@ -12,7 +12,7 @@ import {
 } from "@livekit/components-react";
 import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
-import type { ConnectionDetails } from "./api/connection-details/route";
+import type { ConnectionDetails } from "../app/api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
@@ -53,31 +53,36 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
   }, []);
 
   return (
-    <main
-      data-lk-theme="default"
-      className="h-full w-full grid content-center bg-[var(--lk-bg)]"
-    >
+    <main className="flex flex-col w-full">
       <LiveKitRoom
         token={connectionDetails?.participantToken}
         serverUrl={connectionDetails?.serverUrl}
         connect={connectionDetails !== undefined}
         audio={true}
-        video={true}
-        screen={false}
+        video={false}
+        screen={true}
         onMediaDeviceFailure={onDeviceFailure}
         onDisconnected={() => {
           updateConnectionDetails(undefined);
         }}
-        className="grid grid-rows-[2fr_1fr] items-center"
+        className="flex flex-col h-full"
       >
-        <SimpleVoiceAssistant onStateChange={setAgentState} />
-        <ControlBar
-          onConnectButtonClicked={onConnectButtonClicked}
-          agentState={agentState}
-        />
-        <ChatText />
-        <RoomAudioRenderer />
-        <NoAgentNotification state={agentState} />
+        <div className="flex">
+          <ChatText />
+        </div>
+
+        <div className="flex-grow flex flex-col">
+          {/* the dots */}
+          <SimpleVoiceAssistant onStateChange={setAgentState} />
+          {/* chat now, mic, and stop chatting buttons */}
+          <ControlBar
+            onConnectButtonClicked={onConnectButtonClicked}
+            agentState={agentState}
+          />
+          <RoomAudioRenderer />
+          <NoAgentNotification state={agentState} />
+        </div>
+
       </LiveKitRoom>
     </main>
   );
@@ -91,13 +96,12 @@ function SimpleVoiceAssistant(props: {
     props.onStateChange(state);
   }, [props, state]);
   return (
-    <div className="h-[300px] max-w-[90vw] mx-auto">
+    <div className="h-[60px]">
       <BarVisualizer
         state={state}
         barCount={5}
         trackRef={audioTrack}
         className="agent-visualizer"
-        options={{ minHeight: 24 }}
       />
     </div>
   );
@@ -117,38 +121,25 @@ function ControlBar(props: {
   }, []);
 
   return (
-    <div className="relative h-[100px]">
-      <AnimatePresence>
-        {props.agentState === "disconnected" && (
-          <motion.button
-            initial={{ opacity: 0, top: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, top: "-10px" }}
-            transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
-            onClick={() => props.onConnectButtonClicked()}
-          >
-            Start a conversation
-          </motion.button>
+    <div className="flex items-center justify-center">
+      {props.agentState === "disconnected" && (
+        <button
+          className="bg-tl-blue text-white px-3 p-2 rounded-xl"
+          onClick={() => props.onConnectButtonClicked()}
+        >
+          Chat now
+        </button>
+      )}
+
+      {props.agentState !== "disconnected" &&
+        props.agentState !== "connecting" && (
+          <div className="flex justify-evenly w-full px-4">
+            <VoiceAssistantControlBar controls={{ leave: false }} />
+            <DisconnectButton>
+              Stop chatting
+            </DisconnectButton>
+          </div>
         )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {props.agentState !== "disconnected" &&
-          props.agentState !== "connecting" && (
-            <motion.div
-              initial={{ opacity: 0, top: "10px" }}
-              animate={{ opacity: 1, top: 0 }}
-              exit={{ opacity: 0, top: "-10px" }}
-              transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
-            >
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </motion.div>
-          )}
-      </AnimatePresence>
     </div>
   );
 }
