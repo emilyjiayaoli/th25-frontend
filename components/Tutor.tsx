@@ -124,7 +124,7 @@ function ControlBar(props: {
     <div className="flex items-center justify-center">
       {props.agentState === "disconnected" && (
         <button
-          className="bg-tl-blue text-white px-3 py-2 rounded-xl"
+          className="bg-tl-blue text-white px-3 p-2 rounded-xl"
           onClick={() => props.onConnectButtonClicked()}
         >
           Chat now
