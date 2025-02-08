@@ -17,33 +17,35 @@ import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
-import ChatText from "./ChatText"
+// Custom Components
+import DataMessageListener from "./DataMessageListener";
+import Canvas from "./Canvas"; // Import your Canvas (Tldraw) component
 
 export default function Tutor() {
-  const [connectionDetails, updateConnectionDetails] = useState<
-    ConnectionDetails | undefined
-  >(undefined);
+  const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | undefined>(
+    undefined
+  );
   const [agentState, setAgentState] = useState<AgentState>("disconnected");
+  const [canvasText, setCanvasText] = useState<string>("");
+
+  console.log("canvasText", canvasText);
 
   const onConnectButtonClicked = useCallback(async () => {
-    // Generate room connection details, including:
-    //   - A random Room name
-    //   - A random Participant name
-    //   - An Access Token to permit the participant to join the room
-    //   - The URL of the LiveKit server to connect to
-    //
-    // In real-world application, you would likely allow the user to specify their
-    // own participant name, and possibly to choose from existing rooms to join.
-
     const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-      "/api/connection-details",
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "/api/connection-details",
       window.location.origin
     );
     const response = await fetch(url.toString());
     const connectionDetailsData = await response.json();
     updateConnectionDetails(connectionDetailsData);
   }, []);
+
+  // Handle incoming data messages from LiveKit
+  const handleDataMessage = (message: any, participant: any, kind: any) => {
+    if (message?.type === "whiteboard_update") {
+      setCanvasText(message.content);
+    }
+  };
 
   return (
     <main
@@ -56,19 +58,21 @@ export default function Tutor() {
         connect={connectionDetails !== undefined}
         audio={true}
         video={false}
-        screen={true}
         onMediaDeviceFailure={onDeviceFailure}
         onDisconnected={() => {
           updateConnectionDetails(undefined);
         }}
         className="grid grid-rows-[2fr_1fr] items-center"
       >
+        {/* Listen for AI messages and update Canvas */}
+        <DataMessageListener onDataMessage={handleDataMessage} />
+
+        {/* Render the Canvas (Tldraw Whiteboard) */}
+        {/* <Canvas text={canvasText} /> */}
+
+        {/* Other UI Components */}
         <SimpleVoiceAssistant onStateChange={setAgentState} />
-        <ControlBar
-          onConnectButtonClicked={onConnectButtonClicked}
-          agentState={agentState}
-        />
-        <ChatText />
+        <ControlBar onConnectButtonClicked={onConnectButtonClicked} agentState={agentState} />
         <RoomAudioRenderer />
         <NoAgentNotification state={agentState} />
       </LiveKitRoom>
@@ -76,13 +80,15 @@ export default function Tutor() {
   );
 }
 
-function SimpleVoiceAssistant(props: {
+interface SimpleVoiceAssistantProps {
   onStateChange: (state: AgentState) => void;
-}) {
+}
+
+function SimpleVoiceAssistant({ onStateChange }: SimpleVoiceAssistantProps) {
   const { state, audioTrack } = useVoiceAssistant();
   useEffect(() => {
-    props.onStateChange(state);
-  }, [props, state]);
+    onStateChange(state);
+  }, [onStateChange, state]);
   return (
     <div className="h-[300px] max-w-[90vw] mx-auto">
       <BarVisualizer
@@ -96,57 +102,54 @@ function SimpleVoiceAssistant(props: {
   );
 }
 
-function ControlBar(props: {
+interface ControlBarProps {
   onConnectButtonClicked: () => void;
   agentState: AgentState;
-}) {
-  /**
-   * Use Krisp background noise reduction when available.
-   * Note: This is only available on Scale plan, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
-   */
+}
+
+function ControlBar({ onConnectButtonClicked, agentState }: ControlBarProps) {
   const krisp = useKrispNoiseFilter();
   useEffect(() => {
     krisp.setNoiseFilterEnabled(true);
-  }, []);
+  }, [krisp]);
 
   return (
     <div className="relative h-[100px]">
       <AnimatePresence>
-        {props.agentState === "disconnected" && (
+        {agentState === "disconnected" && (
           <motion.button
             initial={{ opacity: 0, top: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, top: "-10px" }}
             transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
             className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
-            onClick={() => props.onConnectButtonClicked()}
+            onClick={onConnectButtonClicked}
           >
             Start a conversation
           </motion.button>
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {props.agentState !== "disconnected" &&
-          props.agentState !== "connecting" && (
-            <motion.div
-              initial={{ opacity: 0, top: "10px" }}
-              animate={{ opacity: 1, top: 0 }}
-              exit={{ opacity: 0, top: "-10px" }}
-              transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
-            >
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </motion.div>
-          )}
+        {agentState !== "disconnected" && agentState !== "connecting" && (
+          <motion.div
+            initial={{ opacity: 0, top: "10px" }}
+            animate={{ opacity: 1, top: 0 }}
+            exit={{ opacity: 0, top: "-10px" }}
+            transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="flex h-8 absolute left-1/2 -translate-x-1/2 justify-center"
+          >
+            <VoiceAssistantControlBar controls={{ leave: false }} />
+            <DisconnectButton>
+              <CloseIcon />
+            </DisconnectButton>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
 }
 
-function onDeviceFailure(error?: MediaDeviceFailure) {
+function onDeviceFailure(error?: MediaDeviceFailure): void {
   console.error(error);
   alert(
     "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
