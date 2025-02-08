@@ -1,14 +1,6 @@
-// export default function Info() {
-//     return (
-//       <div className="h-full bg-gray-300 p-4 flex items-center justify-center">
-//         <p className="text-lg font-medium">Info</p>
-//       </div>
-//     );
-//   }
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import Webcam from "react-webcam";
+import React, { useState, useEffect } from "react";
 
 // take in isWebcam and setIsWebcam as props
 interface InfoProps {
@@ -18,14 +10,6 @@ interface InfoProps {
 
 export default function Info({ isWebcam, setIsWebcam }: InfoProps) {
   const [files, setFiles] = useState<string[]>([]);
-  const webcamRef = useRef<Webcam>(null);
-
-  // Video constraints (Front camera)
-  const videoConstraints = {
-    width: 1280,
-    height: 720,
-    facingMode: "user",
-  };
 
   useEffect(() => {
     async function fetchFiles() {
@@ -75,22 +59,6 @@ export default function Info({ isWebcam, setIsWebcam }: InfoProps) {
           </div>
         ))}
       </div>
-
-      {/* Fixed Info Size */}
-      {/* <div className="w-full h-full flex items-center justify-center relative">
-        {isWebcam ? (
-          <div className="w-[320px] h-[180px] bg-black rounded-md overflow-hidden">
-            <Webcam
-              ref={webcamRef}
-              videoConstraints={videoConstraints}
-              audio={false}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ) : (
-          <p className="text-lg font-medium">📋 Info</p>
-        )}
-      </div> */}
     </div>
   );
 }
