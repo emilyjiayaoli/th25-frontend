@@ -18,17 +18,13 @@ import { ArrowUpOnSquareStackIcon } from '@heroicons/react/24/outline';
 
 import ChatText from "./ChatText"
 
-// take in isWebcam and setIsWebcam as props
-interface InfoProps {
+interface TutorProps {
   isWebcam: boolean;
   setIsWebcam: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// takes in props for isWebcam and setIsWebcam
-export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
-  const [connectionDetails, updateConnectionDetails] = useState<
-    ConnectionDetails | undefined
-  >(undefined);
+export default function Tutor({ isWebcam, setIsWebcam }: TutorProps) {
+  const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | undefined>(undefined);
   const [agentState, setAgentState] = useState<AgentState>("disconnected");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +50,7 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
   }, []);
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click(); // Trigger file input when button is clicked
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +59,6 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
 
     const formData = new FormData();
     formData.append('file', file);
-    console.log('formdata', formData)
 
     try {
       const response = await fetch('http://127.0.0.1:5000/upload', {
@@ -132,9 +127,7 @@ export default function Tutor({ isWebcam, setIsWebcam }: InfoProps) {
   );
 }
 
-function SimpleVoiceAssistant(props: {
-  onStateChange: (state: AgentState) => void;
-}) {
+function SimpleVoiceAssistant(props: { onStateChange: (state: AgentState) => void; }) {
   const { state, audioTrack } = useVoiceAssistant();
   useEffect(() => {
     props.onStateChange(state);
