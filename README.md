@@ -1,11 +1,11 @@
 # SimpliLearn
 Carnegie Mellon University TartanHacks 2025
 
-Emily Li, Evelynn Chen, Yee Kit Chan, & Anthony Bustamante
+by Emily Li, Evelynn Chen, Yee Kit Chan, & Anthony Bustamante
 
 
 
-[Backend repo]([https://docs.livekit.io/agents](https://github.com/emilyjiayaoli/th25-backend))
+[Backend repo](https://github.com/emilyjiayaoli/th25-backend)
 
 ## Development setup
 
