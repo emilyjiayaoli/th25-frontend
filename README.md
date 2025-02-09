@@ -1,11 +1,11 @@
-# Voice assistant frontend
+# SimpliLearn
+Carnegie Mellon University TartanHacks 2025
 
-A minimalistic frontend for interacting with [LiveKit Agents](https://docs.livekit.io/agents).
+Emily Li, Evelynn Chen, Yee Kit Chan, & Anthony Bustamante
 
-![Screenshot of the frontend application.](/.github/assets/frontent-screenshot.jpeg)
 
-> [!TIP]
-> The best way to test this application along with many others is to use [LiveKit Sandbox](https://cloud.livekit.io/projects/p_/sandbox). Spin up your sandbox in a matter of seconds and test and share your local agents without having to worry about hosting your front end.
+
+[Backend repo]([https://docs.livekit.io/agents](https://github.com/emilyjiayaoli/th25-backend))
 
 ## Development setup
 
@@ -21,5 +21,3 @@ pnpm install
 pnpm dev
 # Open http://localhost:3000 in your browser.
 ```
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
