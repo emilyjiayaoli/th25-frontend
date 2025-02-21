@@ -3,7 +3,6 @@ import { exportToBlob, Tldraw, TLUiComponents, Editor } from 'tldraw';
 import 'tldraw/tldraw.css';
 
 export default function Canvas() {
-
     const [editor, setEditor] = useState<Editor | null>(null);
 
     async function handleExport() {
