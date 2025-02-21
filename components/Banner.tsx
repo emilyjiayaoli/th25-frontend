@@ -7,7 +7,7 @@ export default function Banner() {
                 </div>
 
                 <div className="flex items-center space-x-6">
-                    Never go to OH again
+                    Learn anything anywhere anytime
                 </div>
             </nav>
         </header>
